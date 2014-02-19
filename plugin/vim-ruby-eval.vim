@@ -28,42 +28,62 @@ class EvalBuffer
       end
       lines << line
     }
-    t = Tempfile.open("ruby_eval")
-    path = t.path
-    t.close
-    File.open(path, 'w') {|fp|
-      lines.each {|l|
-        fp.puts l
-      }
-      fp.path
-    }
-    result = errors = nil
-    Open3.popen3(%Q(ruby #{path})) {|stdin, stdout, stderr|
-      stdin.close
-      result = stdout.read
-      errors = stderr.read
-    }
-    appends = []
 
+    path = write_to_temp_file(lines)
+    output, error = run_ruby(path)
+
+    write_result_to_buffer(output, error)
+  end
+
+  def write_result_to_buffer(output, error)
+    real_output = []
     clear_eval_result
 
-    result.each_line {|line|
+    # pick inspect values and write to marker comment.
+    output.each_line {|line|
       if line =~ /^# => (\d+):(.*)$/
         index = $1.to_i
         val = $2
         @buffer[index] = @buffer[index].gsub(/# =>.*$/, "# => #{val}")
       else
-        appends << line
+        real_output << line
       end
     }
 
-    appends.each {|l|
+    real_output.each {|l|
       @buffer.append(@buffer.length, '# >> ' + l.chomp)
     }
 
-    errors.each_line {|l|
+    error.each_line {|l|
       @buffer.append(@buffer.length, '# ~> ' + l.chomp)
     }
+  end
+
+  def write_to_temp_file(lines)
+    path = prepare_temp_path
+    open(path, 'w') {|fp|
+      lines.each {|l|
+        fp.puts l
+      }
+    }
+    path
+  end
+
+  # retval: [output, error]
+  def run_ruby(path)
+    output = error = nil
+    Open3.popen3(%Q(ruby #{path})) {|stdin, stdout, stderr|
+      stdin.close
+      output = stdout.read
+      error = stderr.read
+    }
+    [output, error]
+  end
+
+  def prepare_temp_path
+    t = Tempfile.open("ruby_eval")
+    t.close
+    t.path
   end
 
   def clear_eval_result
