@@ -16,10 +16,10 @@ require 'open3'
 class EvalBuffer
   def initialize
     @buffer = VIM::Buffer.current
-    eval_buffer(s)
+    eval_buffer
   end
 
-  def eval_buffer(s)
+  def eval_buffer
     lines = []
     (1..@buffer.length).each {|i|
       line = @buffer[i]
@@ -87,36 +87,6 @@ gem = EvalBuffer.new
 EOF
 endfunction
 
-command! -nargs=0 RedGem call RedGem()
+command! -nargs=0 RubyEval call RubyEval()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-command! -nargs=1 -complete=customlist,ListGitCommits GitCheckout call GitCheckout(<q-args>)
-command! -nargs=* -complete=customlist,ListGitCommits GitDiff     call GitDiff(<q-args>)
-command!          GitStatus           call GitStatus()
-command! -nargs=? GitAdd              call GitAdd(<q-args>)
-command! -nargs=* GitLog              call GitLog(<q-args>)
-command! -nargs=* GitCommit           call GitCommit(<q-args>)
-command! -nargs=1 GitCatFile          call GitCatFile(<q-args>)
-command! -nargs=? GitBlame            call GitBlame(<q-args>)
-command! -nargs=+ Git                 call GitDoCommand(<q-args>)
-command!          GitVimDiffMerge     call GitVimDiffMerge()
-command!          GitVimDiffMergeDone call GitVimDiffMergeDone()
-command! -nargs=* GitPull             call GitPull(<q-args>)
-command!          GitPullRebase       call GitPull('--rebase')
-command! -nargs=* GitPush             call GitPush(<q-args>)
