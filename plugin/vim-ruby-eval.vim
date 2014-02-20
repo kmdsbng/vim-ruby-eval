@@ -83,7 +83,7 @@ class EvalBuffer
   def prepare_temp_path
     t = Tempfile.open("ruby_eval")
     t.close
-    t.path
+    t.path + "_temp" # Dirty hack
   end
 
   def clear_eval_result
