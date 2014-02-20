@@ -2,7 +2,7 @@
 
 vim-ruby-eval provides `:RubyEval` command.
 
-`:RubyEval` run current buffer by Ruby, and write result in maker comment.
+`:RubyEval` run current buffer by Ruby, and write result after maker comment.
 
 ![Qiita](https://raw.github.com/kmdsbng/vim-ruby-eval/master/screencast.gif "Demo")
 
