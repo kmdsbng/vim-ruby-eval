@@ -1,4 +1,4 @@
-# VIM Ruby Eval
+# Vim Ruby Eval
 
 vim-ruby-eval provides `:RubyEval` command.
 
@@ -7,14 +7,14 @@ vim-ruby-eval provides `:RubyEval` command.
 ![Qiita](https://raw.github.com/kmdsbng/vim-ruby-eval/master/screencast.gif "Demo")
 
 
-VIM Ruby Eval inspired by Kevin Thompson's Sublime RubyEval. (https://github.com/kevinthompson/SublimeRubyEval)
+Vim Ruby Eval inspired by Kevin Thompson's Sublime RubyEval. (https://github.com/kevinthompson/SublimeRubyEval)
 
 Happy hacking!
 
 
 ## Requirements
 
-vim-ruby-eval depends on Vim Ruby Interface.
+Vim Ruby Eval depends on Vim Ruby Interface.
 So please check `vim --version` and `+ruby` is available.
 
 
