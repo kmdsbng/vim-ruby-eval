@@ -12,6 +12,7 @@ function! RubyEval()
 ruby << EOF
 require 'tempfile'
 require 'open3'
+require 'fileutils'
 
 class EvalBuffer
   def initialize
@@ -33,6 +34,7 @@ class EvalBuffer
     output, error = run_ruby(path)
 
     write_result_to_buffer(output, error)
+    FileUtils.rm(path)
   end
 
   def write_result_to_buffer(output, error)
@@ -81,9 +83,13 @@ class EvalBuffer
   end
 
   def prepare_temp_path
-    t = Tempfile.open("ruby_eval")
-    t.close
-    t.path
+    if @buffer.name && !@buffer.name.empty?
+      return @buffer.name + ".rubyeval"
+    else
+      t = Tempfile.open("ruby_eval")
+      t.close
+      t.path
+    end
   end
 
   def clear_eval_result
