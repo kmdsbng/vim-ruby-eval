@@ -11,7 +11,7 @@ describe "VimRubyEval" do
     }
   end
 
-  context "1.rb" do
+  context "write eval result" do
     before do
       src = <<END
 1 # =>
@@ -24,7 +24,24 @@ END
 1 # => 1
 END
       `vim "+RubyEval" "+w" "+q" #{temp_path("1.rb")}`
-      File.read(temp_path("1.rb")).should eq(expect)
+      expect(File.read(temp_path("1.rb"))).to eq(expect)
+    end
+  end
+
+  context "don't write eval result if line starts by #" do
+    before do
+      src = <<END
+  # 1 # =>
+END
+      write_temp_file("1.rb", src)
+    end
+
+    it "inject result" do
+      expect = <<END
+  # 1 # =>
+END
+      `vim "+RubyEval" "+w" "+q" #{temp_path("1.rb")}`
+      expect(File.read(temp_path("1.rb"))).to eq(expect)
     end
   end
 end
