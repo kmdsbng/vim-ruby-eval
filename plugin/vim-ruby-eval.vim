@@ -24,7 +24,11 @@ class EvalBuffer
     lines = []
     (1..@buffer.length).each {|i|
       line = @buffer[i]
-      next if line =~ /^(\s*)#/ # if line starts with comment, skip eval
+      if line =~ /^(\s*)#/ # if line starts with comment, skip eval
+        lines << line
+        next
+      end
+
       if line =~ /^(.*)(# =>.*)$/
         line = %Q[__vim_ruby_eval_val = (#{$1});] + %Q[print("# => #{i}:");puts(__vim_ruby_eval_val.inspect.each_line.first)]
       end
